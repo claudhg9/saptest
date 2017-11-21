@@ -225,7 +225,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('mediumUri')]"
+                    "uri": "[variables('largeUri')]"
                 },
                 "parameters": {
                     "vmName": {
@@ -275,7 +275,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[variables('mediumUri')]"
+                    "uri": "[variables('extralargeUri')]"
                 },
                 "parameters": {
                     "vmName": {
