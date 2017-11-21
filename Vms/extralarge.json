@@ -129,18 +129,7 @@
             "data5lun": 11
         }
     },
-    "resources": [{
-            "apiVersion": "[variables('api-version')]",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('vmName')]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "publicIPAllocationMethod": "Dynamic",
-                "dnsSettings": {
-                    "domainNameLabel": "[parameters('vmName')]"
-                }
-            }
-        },
+    "resources": [
         {
             "apiVersion": "[variables('api-version')]",
             "type": "Microsoft.Network/virtualNetworks",
@@ -166,7 +155,6 @@
             "name": "[variables('nicName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', parameters('vmName'))]",
                 "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
             ],
             "properties": {
@@ -176,9 +164,6 @@
                         "privateIPAllocationMethod": "Dynamic",
                         "subnet": {
                             "id": "[variables('subnetRef')]"
-                        },
-                        "publicIPAddress": {
-                            "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('vmName'))]"
                         }
                     }
                 }]
