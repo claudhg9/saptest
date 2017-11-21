@@ -52,8 +52,6 @@
     }
   },
     "variables": {
-        "adminUsername": "testuser",
-        "adminPassword": "HANA07061992!",
         "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('NetworkName'), parameters('subnetName'))]",
         "vmName": "hanajb",
         "vNicName": "hanajbnic",
@@ -148,8 +146,8 @@
                 },
                 "osProfile": {
                     "computerName": "[variables('vmName')]",
-                    "adminUsername": "[variables('adminUsername')]",
-                    "adminPassword": "[variables('adminPassword')]"
+                    "adminUsername": "[parameters('vmUserName')]",
+                    "adminPassword": "[parameters('vmPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
