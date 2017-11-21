@@ -325,7 +325,7 @@
                         }
                     },
                     {
-                        "lun": "[variables('diskConfig').datalun]",
+                        "lun": "[variables('diskConfig').data1lun]",
                         "createOption": "attach",
                         "managedDisk": {
                             "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data1'))]"
@@ -338,7 +338,8 @@
                             "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data2'))]"
                         }
                     }
-                ],
+                ]
+            },
                 "networkProfile": {
                     "networkInterfaces": [{
                         "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
@@ -367,7 +368,7 @@
                 }
             }]
         }
-    }
+    
     ],
     "outputs": {}
 }
