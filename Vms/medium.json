@@ -303,7 +303,7 @@
                         }
                     },
                     {
-                        "lun": "[variables('diskConfig').backup2lun]",
+                        "lun": "[variables('diskConfig').backuplun2]",
                         "createOption": "attach",
                         "managedDisk": {
                             "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup2'))]"
