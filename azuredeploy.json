@@ -1,0 +1,357 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vmName": {
+            "type": "string",
+            "metadata": {
+                "description": "VM Name"
+            }
+        },
+        "HanaJumpbox": {
+            "type": "string",
+            "allowedValues": [
+                "yes",
+                "no"
+            ]
+        },
+        "vmSize": {
+            "type": "string",
+            "metadata": {
+                "description": "VM Size"
+            },
+            "defaultValue": "Standard_GS5",
+            "allowedValues": [
+                "Standard_GS5",
+                "Standard_M64s",
+                "Standard_M64ms",
+                "Standard_M128s",
+                "Standard_M128ms",
+                "Standard_E16s_v3",
+                "Standard_E32s_v3",
+                "Standard_E64s_v3"
+            ]
+        },
+        "networkName": {
+            "type": "string",
+            "defaultValue": "ra-sap-hana-vnet",
+            "metadata": {
+                "description": "The Hana vNet"
+            }
+        },
+        "addressPrefixes": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+                "description": "The Hana vNET prefix"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "SAPDataSubnet",
+            "metadata": {
+                "description": "The Hana subnet name"
+            }
+        },
+        "subnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.5.0/24",
+            "metadata": {
+                "description": "The data subnet"
+            }
+        },
+        "customUri": {
+            "type": "string",
+            "metadata": {
+                "description": "Uri for Custom Script Extension"
+            }
+        },
+        "vmUserName": {
+            "type": "string",
+            "metadata": {
+                "description": "Username for the Virtual Machine"
+            },
+            "defaultValue": "testuser"
+        },
+        "vmPassword": {
+            "type": "string",
+            "metadata": {
+                "description": "Password for the Virtual Machine"
+            },
+            "defaultValue": "Hana07061992!"
+        },
+        "OperatingSystem": {
+            "type": "string",
+            "metadata": {
+                "description": "Operating system for HANA Machine"
+            },
+            "defaultValue": "SLES for SAP 12 SP2",
+            "allowedValues": [
+                "SLES for SAP 12 SP2",
+                "RHEL 7.2 for SAP HANA"
+            ]
+        },
+        "hanaSid": {
+            "type": "string",
+            "metadata": {
+                "description": "SAP HANA System ID"
+            },
+            "defaultValue": "H10"
+        },
+        "hanaNumber": {
+            "type": "string",
+            "metadata": {
+                "description": "SAP HANA Instance Number"
+            },
+            "defaultValue": "00"
+        }              
+    },
+    "variables": {
+        "vmName": "[toLower(parameters('vmName'))]",
+        "smallUri": "[concat(parameters('customUri'), '\\Vms\\small.json')]",
+        "mediumUri": "[concat(parameters('customUri'), '\\Vms\\medium.json')]",
+        "largeUri": "[concat(parameters('customUri'), '\\Vms\\large.json')]",
+        "extralargeUri": "[concat(parameters('customUri'), '\\Vms\\extralarge.json')]",
+        "hanajbUri": "[concat(parameters('customUri'), '\\Vms\\hanajb.json')]",
+        "hanaUri":"[concat(parameters('customUri'), '\\hanastudio.ps1')]"
+    },
+    "resources": [
+
+        {
+            "condition": "[or(or(equals(parameters('vmSize'),'Standard_E16s_v3'),equals(parameters('vmSize'),'Standard_E32s_v3')), or(equals(parameters('vmSize'),'Standard_E64s_v3'),equals(parameters('vmSize'),'Standard_GS5')))]",
+            "apiVersion": "2016-09-01",
+            "name": "SmallLinkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('smallUri')]"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[parameters('vmName')]"
+                    },
+                    "customUri": {
+                        "value": "[parameters('customUri')]"
+                    },
+                    "networkName": {
+                        "value": "[parameters('networkName')]"
+                    },
+                    "addressPrefixes":{
+                        "value": "[parameters('addressPrefixes')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    },
+                    "subnetPrefix": {
+                        "value": "[parameters('subnetPrefix')]"
+                    },
+                    "OperatingSystem": {
+                        "value": "[parameters('OperatingSystem')]"
+                    },
+                    "vmUserName": {
+                        "value": "[parameters('vmUserName')]"
+                    },
+                    "vmPassword": {
+                        "value": "[parameters('vmPassword')]"
+                    },
+                    "hanaSid": {
+                        "value": "[parameters('hanaSid')]"
+                    },
+                    "hanaNumber": {
+                        "value": "[parameters('hanaNumber')]"
+                    },
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[equals(parameters('vmSize'),'Standard_M64s')]",
+            "apiVersion": "2016-09-01",
+            "name": "MediumLinkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('mediumUri')]"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[parameters('vmName')]"
+                    },
+                    "customUri": {
+                        "value": "[parameters('customUri')]"
+                    },
+                    "networkName": {
+                        "value": "[parameters('networkName')]"
+                    },
+                    "addressPrefixes":{
+                        "value": "[parameters('addressPrefixes')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    },
+                    "subnetPrefix": {
+                        "value": "[parameters('subnetPrefix')]"
+                    },
+                    "OperatingSystem": {
+                        "value": "[parameters('OperatingSystem')]"
+                    },
+                    "vmUserName": {
+                        "value": "[parameters('vmUserName')]"
+                    },
+                    "vmPassword": {
+                        "value": "[parameters('vmPassword')]"
+                    },
+                    "hanaSid": {
+                        "value": "[parameters('hanaSid')]"
+                    },
+                    "hanaNumber": {
+                        "value": "[parameters('hanaNumber')]"
+                    },
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[or(equals(parameters('vmSize'),'Standard_M64ms'),equals(parameters('vmSize'),'Standard_M128s'))]",
+            "apiVersion": "2016-09-01",
+            "name": "LargeLinkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('mediumUri')]"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[parameters('vmName')]"
+                    },
+                    "customUri": {
+                        "value": "[parameters('customUri')]"
+                    },
+                    "networkName": {
+                        "value": "[parameters('networkName')]"
+                    },
+                    "addressPrefixes":{
+                        "value": "[parameters('addressPrefixes')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    },
+                    "subnetPrefix": {
+                        "value": "[parameters('subnetPrefix')]"
+                    },
+                    "OperatingSystem": {
+                        "value": "[parameters('OperatingSystem')]"
+                    },
+                    "vmUserName": {
+                        "value": "[parameters('vmUserName')]"
+                    },
+                    "vmPassword": {
+                        "value": "[parameters('vmPassword')]"
+                    },
+                    "hanaSid": {
+                        "value": "[parameters('hanaSid')]"
+                    },
+                    "hanaNumber": {
+                        "value": "[parameters('hanaNumber')]"
+                    },
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[equals(parameters('vmSize'), 'Standard_M128ms')]",
+            "apiVersion": "2016-09-01",
+            "name": "extralargeLinkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('mediumUri')]"
+                },
+                "parameters": {
+                    "vmName": {
+                        "value": "[parameters('vmName')]"
+                    },
+                    "customUri": {
+                        "value": "[parameters('customUri')]"
+                    },
+                    "networkName": {
+                        "value": "[parameters('networkName')]"
+                    },
+                    "addressPrefixes":{
+                        "value": "[parameters('addressPrefixes')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    },
+                    "subnetPrefix": {
+                        "value": "[parameters('subnetPrefix')]"
+                    },
+                    "OperatingSystem": {
+                        "value": "[parameters('OperatingSystem')]"
+                    },
+                    "vmUserName": {
+                        "value": "[parameters('vmUserName')]"
+                    },
+                    "vmPassword": {
+                        "value": "[parameters('vmPassword')]"
+                    },
+                    "hanaSid": {
+                        "value": "[parameters('hanaSid')]"
+                    },
+                    "hanaNumber": {
+                        "value": "[parameters('hanaNumber')]"
+                    },
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[equals(parameters('HanaJumpbox'),'yes')]",
+            "apiVersion": "2016-09-01",
+            "name": "HANAjbLinkedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                  "uri": "[variables('hanajbUri')]"
+                },
+              "parameters": {
+                "networkName": {
+                  "value": "[parameters('networkName')]"
+                },
+                "addressPrefixes": {
+                  "value": "[parameters('addressPrefixes')]"
+                },
+                "subnetName": {
+                  "value": "[parameters('subnetName')]"
+                },
+                "subnetPrefix": {
+                  "value": "[parameters('subnetPrefix')]"
+                },
+                "vmUserName": {
+                  "value": "[parameters('vmUserName')]"
+                },
+                "vmPassword": {
+                  "value": "[parameters('vmPassword')]"
+                }
+
+              }
+        
+            }    
+        }
+
+    ],
+    "outputs": {}
+}
