@@ -285,7 +285,7 @@
                 },
                 "diskSizeGB": "[variables('diskConfig').data2]"
             }
-        }
+        },
         {
             "apiVersion": "[variables('api-version-vm')]",
             "type": "Microsoft.Compute/virtualMachines",
@@ -369,10 +369,10 @@
                     "typeHandlerVersion": "2.0",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
-                        "fileUris": [
-                            "https://raw.githubusercontent.com/claudhg9/azure-puppet/master/preReqInstall.sh"
-                        ],
-                        "commandToExecute": "[concat('sh preReqInstall.sh ', parameters('customUri'), ' ' , parameters('vmUserName'), ' ', parameters('vmPassword'),' ', parameters('HANASID'), ' ', parameters('HANANUMBER'))]"
+                      "fileUris": [
+                        "https://raw.githubusercontent.com/claudhg9/saptest/master/scripts/small.sh"
+                      ],
+                        "commandToExecute": "[concat('sh small.sh ', parameters('customUri'), ' ' , parameters('vmUserName'), ' ', parameters('vmPassword'),' ', parameters('HANASID'), ' ', parameters('HANANUMBER'))]"
                     }
                 }
             }]

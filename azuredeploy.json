@@ -106,15 +106,15 @@
             "defaultValue": "00"
         }              
     },
-    "variables": {
-        "vmName": "[toLower(parameters('vmName'))]",
-        "smallUri": "[concat(parameters('customUri'), '\\Vms\\small.json')]",
-        "mediumUri": "[concat(parameters('customUri'), '\\Vms\\medium.json')]",
-        "largeUri": "[concat(parameters('customUri'), '\\Vms\\large.json')]",
-        "extralargeUri": "[concat(parameters('customUri'), '\\Vms\\extralarge.json')]",
-        "hanajbUri": "[concat(parameters('customUri'), '\\Vms\\hanajb.json')]",
-        "hanaUri":"[concat(parameters('customUri'), '\\hanastudio.ps1')]"
-    },
+  "variables": {
+    "vmName": "[toLower(parameters('vmName'))]",
+    "smallUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/small.json",
+    "mediumUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/medium.json",
+    "largeUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/large.json",
+    "extralargeUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/extralarge.json')]",
+    "hanajbUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/hanajb.json",
+    "hanaUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/hanastudio.ps1"
+  },
     "resources": [
 
         {
@@ -322,34 +322,37 @@
             "apiVersion": "2016-09-01",
             "name": "HANAjbLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                  "uri": "[variables('hanajbUri')]"
-                },
-              "parameters": {
-                "networkName": {
-                  "value": "[parameters('networkName')]"
-                },
-                "addressPrefixes": {
-                  "value": "[parameters('addressPrefixes')]"
-                },
-                "subnetName": {
-                  "value": "[parameters('subnetName')]"
-                },
-                "subnetPrefix": {
-                  "value": "[parameters('subnetPrefix')]"
-                },
-                "vmUserName": {
-                  "value": "[parameters('vmUserName')]"
-                },
-                "vmPassword": {
-                  "value": "[parameters('vmPassword')]"
-                }
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri": "[variables('hanajbUri')]"
+            },
+            "parameters": {
+              "networkName": {
+                "value": "[parameters('networkName')]"
+              },
+              "addressPrefixes": {
+                "value": "[parameters('addressPrefixes')]"
+              },
+              "subnetName": {
+                "value": "[parameters('subnetName')]"
+              },
+              "subnetPrefix": {
+                "value": "[parameters('subnetPrefix')]"
+              },
+              "vmUserName": {
+                "value": "[parameters('vmUserName')]"
+              },
+              "vmPassword": {
+                "value": "[parameters('vmPassword')]"
+              },
+              "customUri": {
+                "value": "[parameters('customUri')]"
 
               }
-        
-            }    
+            }
+          }
+                  
         }
 
     ],
