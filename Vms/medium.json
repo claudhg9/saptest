@@ -345,10 +345,10 @@
                     "typeHandlerVersion": "2.0",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
-                        "fileUris": [
-                            "https://raw.githubusercontent.com/claudhg9/azure-puppet/master/preReqInstall.sh"
-                        ],
-                        "commandToExecute": "[concat('sh preReqInstall.sh ', parameters('customUri'), ' ' , parameters('vmUserName'), ' ', parameters('vmPassword'),' ', parameters('HANASID'), ' ', parameters('HANANUMBER'))]"
+                      "fileUris": [
+                        "hhttps://raw.githubusercontent.com/claudhg9/saptest/master/scripts/small.sh"
+                      ],
+                        "commandToExecute": "[concat('sh medium.sh ', parameters('customUri'), ' ' , parameters('vmUserName'), ' ', parameters('vmPassword'),' ', parameters('HANASID'), ' ', parameters('HANANUMBER'))]"
                     }
                 }
             }]

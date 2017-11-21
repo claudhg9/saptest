@@ -493,10 +493,10 @@
                     "typeHandlerVersion": "2.0",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
-                        "fileUris": [
-                            "https://raw.githubusercontent.com/claudhg9/azure-puppet/master/preReqInstall.sh"
-                        ],
-                        "commandToExecute": "[concat('sh preReqInstall.sh ', parameters('customUri'), ' ' , parameters('vmUserName'), ' ', parameters('vmPassword'),' ', parameters('HANASID'), ' ', parameters('HANANUMBER'))]"
+                      "fileUris": [
+                        "https://raw.githubusercontent.com/claudhg9/saptest/master/scripts/extraLarge.sh"
+                      ],
+                        "commandToExecute": "[concat('sh extraLarge.sh ', parameters('customUri'), ' ' , parameters('vmUserName'), ' ', parameters('vmPassword'),' ', parameters('HANASID'), ' ', parameters('HANANUMBER'))]"
                     }
                 }
             }]
