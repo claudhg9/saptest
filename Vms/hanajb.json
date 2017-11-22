@@ -86,33 +86,11 @@
         },
         {
             "apiVersion": "2016-09-01",
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('NetworkName')]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('addressPrefixes')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[parameters('subnetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('subnetPrefix')]"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2016-09-01",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('vNicName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[variables('PIPName')]",
-                "[parameters('NetworkName')]"
+                "[variables('PIPName')]"
             ],
             "properties": {
                 "ipConfigurations": [
