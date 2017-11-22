@@ -118,10 +118,34 @@
     "resources": [
 
         {
+        "apiVersion": "2016-09-01",
+        "type": "Microsoft.Network/virtualNetworks",
+        "name": "[parameters('networkName')]",
+        "location": "[resourceGroup().location]",
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[parameters('addressPrefixes')]"
+            ]
+          },
+          "subnets": [
+            {
+              "name": "[parameters('subnetName')]",
+              "properties": {
+                "addressPrefix": "[parameters('subnetPrefix')]"
+              }
+            }
+          ]
+        }
+      },
+          { 
             "condition": "[or(or(equals(parameters('vmSize'),'Standard_E16s_v3'),equals(parameters('vmSize'),'Standard_E32s_v3')), or(equals(parameters('vmSize'),'Standard_E64s_v3'),equals(parameters('vmSize'),'Standard_GS5')))]",
             "apiVersion": "2016-09-01",
             "name": "SmallLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+              ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -172,6 +196,9 @@
             "apiVersion": "2016-09-01",
             "name": "MediumLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+              ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -222,6 +249,9 @@
             "apiVersion": "2016-09-01",
             "name": "LargeLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+              ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -272,6 +302,9 @@
             "apiVersion": "2016-09-01",
             "name": "extralargeLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+              ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -322,6 +355,9 @@
             "apiVersion": "2016-09-01",
             "name": "HANAjbLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+              ],
           "properties": {
             "mode": "Incremental",
             "templateLink": {
