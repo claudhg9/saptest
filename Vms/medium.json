@@ -346,7 +346,7 @@
                     "autoUpgradeMinorVersion": true,
                     "settings": {
                       "fileUris": [
-                        "hhttps://raw.githubusercontent.com/claudhg9/saptest/master/scripts/small.sh"
+                        "https://raw.githubusercontent.com/claudhg9/saptest/master/scripts/medium.sh"
                       ],
                         "commandToExecute": "[concat('sh medium.sh ', parameters('customUri'), ' ' , parameters('vmUserName'), ' ', parameters('vmPassword'),' ', parameters('HANASID'), ' ', parameters('HANANUMBER'))]"
                     }
