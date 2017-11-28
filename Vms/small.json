@@ -107,48 +107,28 @@
             "sap": 63,
             "backup": 127,
             "data1": 511,
-            "data2": 511,
-            "sharedlun": 0,
-            "saplun": 1,
-            "backuplun": 2,
-            "data1lun": 3,
-            "data2lun": 4
+            "data2": 511
         },
         "diskConfig_Standard_E32s_v3": {
             "shared": 511,
             "sap": 63,
             "backup": 511,
             "data1": 511,
-            "data2": 511,
-            "sharedlun": 0,
-            "saplun": 1,
-            "backuplun": 2,
-            "data1lun": 3,
-            "data2lun": 4
+            "data2": 511
         },
         "diskConfig_Standard_E64s_v3": {
             "shared": 511,
             "sap": 63,
             "backup": 1023,
             "data1": 511,
-            "data2": 511,
-            "sharedlun": 0,
-            "saplun": 1,
-            "backuplun": 2,
-            "data1lun": 3,
-            "data2lun": 4
+            "data2": 511
         },
         "diskConfig_Standard_GS5": {
             "shared": 511,
             "sap": 63,
             "backup": 1023,
             "data1": 511,
-            "data2": 511,
-            "sharedlun": 0,
-            "saplun": 1,
-            "backuplun": 2,
-            "data1lun": 3,
-            "data2lun": 4
+            "data2": 511
         }
       },
   "resources": [
@@ -257,7 +237,12 @@
       "name": "[parameters('vmName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]",
+        "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-shared'))]",
+        "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-sap'))]",
+        "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup'))]",
+        "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data1'))]",
+        "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data2'))]"
       ],
       "properties": {
         "hardwareProfile": {
@@ -280,35 +265,35 @@
           },
           "dataDisks": [
             {
-              "lun": "[variables('diskConfig').sharedlun]",
+              "lun": 0,
               "createOption": "attach",
               "managedDisk": {
                 "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-shared'))]"
               }
             },
             {
-              "lun": "[variables('diskConfig').saplun]",
+              "lun": 1,
               "createOption": "attach",
               "managedDisk": {
                 "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-sap'))]"
               }
             },
             {
-              "lun": "[variables('diskConfig').backuplun]",
+              "lun": 2,
               "createOption": "attach",
               "managedDisk": {
                 "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup1'))]"
               }
             },
             {
-              "lun": "[variables('diskConfig').data1lun]",
+              "lun": 3,
               "createOption": "attach",
               "managedDisk": {
                 "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data1'))]"
               }
             },
             {
-              "lun": "[variables('diskConfig').data2lun]",
+              "lun": 4,
               "createOption": "attach",
               "managedDisk": {
                 "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data2'))]"
