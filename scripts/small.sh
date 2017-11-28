@@ -60,9 +60,11 @@ hanavg2lun="$(lsscsi 5 0 0 4 | grep -o '.\{8\}$')"
 
 echo "logicalvols start" >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefg]
+  hanavg1lun="$(lsscsi 5 0 0 3 | grep -o '.\{8\}$')"
+  hanavg2lun="$(lsscsi 5 0 0 4 | grep -o '.\{8\}$')"
   vgcreate hanavg $hanavg1lun $hanavg2lun
   lvcreate -l 80%FREE -n datalv hanavg
-  lvcreate -l 20%FREE -n loglv hanavg
+  lvcreate -l 20% -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
   mkfs.xfs /dev/hanavg/loglv
 echo "logicalvols end" >> /tmp/parameter.txt
@@ -70,6 +72,9 @@ echo "logicalvols end" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
+  sharedvglun="$(lsscsi 5 0 0 0 | grep -o '.\{8\}$')"
+  usrsapvglun="$(lsscsi 5 0 0 1 | grep -o '.\{8\}$')"
+  backupvglun="$(lsscsi 5 0 0 2 | grep -o '.\{8\}$')"
   vgcreate backupvg $backupvglun
   vgcreate sharedvg $sharedvglun
   vgcreate usrsapvg $usrsapvglun 
