@@ -51,9 +51,16 @@ UserTasksMax=infinity\n/g"
 cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
 cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
+sharedvglun="$(lsscsi 5 0 0 0 | grep -o '.\{8\}$')"
+usrsapvglun="$(lsscsi 5 0 0 1 | grep -o '.\{8\}$')"
+backupvglun="$(lsscsi 5 0 0 2 | grep -o '.\{8\}$')"
+hanavg1lun="$(lsscsi 5 0 0 3 | grep -o '.\{8\}$')"
+hanavg2lun="$(lsscsi 5 0 0 4 | grep -o '.\{8\}$')"
+
+
 echo "logicalvols start" >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefg]
-  vgcreate hanavg /dev/sd[fg]
+  vgcreate hanavg $hanavg1lun $hanavg2lun
   lvcreate -l 80%FREE -n datalv hanavg
   lvcreate -l 20%FREE -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
@@ -63,9 +70,9 @@ echo "logicalvols end" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
-  vgcreate sharedvg /dev/sdc 
-  vgcreate usrsapvg /dev/sdd
-  vgcreate backupvg /dev/sde  
+  vgcreate backupvg $backupvglun
+  vgcreate sharedvg $sharedvglun
+  vgcreate usrsapvg $usrsapvglun 
   lvcreate -l 100%FREE -n sharedlv sharedvg 
   lvcreate -l 100%FREE -n backuplv backupvg 
   lvcreate -l 100%FREE -n usrsaplv usrsapvg 
