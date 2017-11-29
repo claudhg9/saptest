@@ -44,27 +44,14 @@ sedcmd2="s/ResourceDisk.SwapSizeMB=16384/ResourceDisk.SwapSizeMB=16384/g"
 cat /etc/waagent.conf | sed $sedcmd | sed $sedcmd2 > /etc/waagent.conf.new
 cp -f /etc/waagent.conf.new /etc/waagent.conf
 
-cp -f /etc/systemd/login.conf.d/sap.conf /etc/systemd/login.conf.d/sap.conf.orig
-sedcmd="s/[login]\n
-UserTasksMax=infinity\n/[login]\n
-UserTasksMax=infinity\n/g"
-cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
-cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
-
-sharedvglun="$(lsscsi 5 0 0 0 | grep -o '.\{8\}$')"
-usrsapvglun="$(lsscsi 5 0 0 1 | grep -o '.\{8\}$')"
-backupvglun="$(lsscsi 5 0 0 2 | grep -o '.\{8\}$')"
-hanavg1lun="$(lsscsi 5 0 0 3 | grep -o '.\{8\}$')"
-hanavg2lun="$(lsscsi 5 0 0 4 | grep -o '.\{8\}$')"
-
 
 echo "logicalvols start" >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefg]
-  hanavg1lun="$(lsscsi 5 0 0 3 | grep -o '.\{8\}$')"
-  hanavg2lun="$(lsscsi 5 0 0 4 | grep -o '.\{8\}$')"
+  hanavg1lun="$(lsscsi 5 0 0 3 | grep -o '.\{9\}$')"
+  hanavg2lun="$(lsscsi 5 0 0 4 | grep -o '.\{9\}$')"
   vgcreate hanavg $hanavg1lun $hanavg2lun
   lvcreate -l 80%FREE -n datalv hanavg
-  lvcreate -l 20% -n loglv hanavg
+  lvcreate -l 20%VG -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
   mkfs.xfs /dev/hanavg/loglv
 echo "logicalvols end" >> /tmp/parameter.txt
@@ -72,9 +59,9 @@ echo "logicalvols end" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
-  sharedvglun="$(lsscsi 5 0 0 0 | grep -o '.\{8\}$')"
-  usrsapvglun="$(lsscsi 5 0 0 1 | grep -o '.\{8\}$')"
-  backupvglun="$(lsscsi 5 0 0 2 | grep -o '.\{8\}$')"
+  sharedvglun="$(lsscsi 5 0 0 0 | grep -o '.\{9\}$')"
+  usrsapvglun="$(lsscsi 5 0 0 1 | grep -o '.\{9\}$')"
+  backupvglun="$(lsscsi 5 0 0 2 | grep -o '.\{9\}$')"
   vgcreate backupvg $backupvglun
   vgcreate sharedvg $sharedvglun
   vgcreate usrsapvg $usrsapvglun 
