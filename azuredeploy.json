@@ -2,7 +2,7 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vmName": {
+        "VMName": {
             "type": "string",
             "metadata": {
                 "description": "VM Name"
@@ -15,7 +15,7 @@
                 "no"
             ]
         },
-        "vmSize": {
+        "VMSize": {
             "type": "string",
             "metadata": {
                 "description": "VM Size"
@@ -32,48 +32,48 @@
                 "Standard_E64s_v3"
             ]
         },
-        "networkName": {
+        "NetworkName": {
             "type": "string",
             "defaultValue": "ra-sap-hana-vnet",
             "metadata": {
-                "description": "The Hana vNet"
+                "description": "The HANA VNET"
             }
         },
         "addressPrefixes": {
             "type": "string",
             "defaultValue": "10.0.0.0/16",
             "metadata": {
-                "description": "The Hana vNET prefix"
+                "description": "The HANA VNET prefix"
             }
         },
         "subnetName": {
             "type": "string",
             "defaultValue": "SAPDataSubnet",
             "metadata": {
-                "description": "The Hana subnet name"
+                "description": "The HANA subnet name"
             }
         },
         "subnetPrefix": {
             "type": "string",
             "defaultValue": "10.0.5.0/24",
             "metadata": {
-                "description": "The data subnet"
+                "description": "The data subnet prefix"
             }
         },
-        "customUri": {
+        "customURI": {
             "type": "string",
             "metadata": {
-                "description": "Uri for Custom Script Extension"
+                "description": "URI where SAP bits are uploaded"
             }
         },
-        "vmUserName": {
+        "VMUserName": {
             "type": "string",
             "metadata": {
                 "description": "Username for the Virtual Machine"
             },
             "defaultValue": "testuser"
         },
-        "vmPassword": {
+        "VMPassword": {
             "type": "string",
             "metadata": {
                 "description": "Password for the Virtual Machine"
@@ -91,14 +91,14 @@
                 "RHEL 7.2 for SAP HANA"
             ]
         },
-        "hanaSid": {
+        "HANASID": {
             "type": "string",
             "metadata": {
                 "description": "SAP HANA System ID"
             },
             "defaultValue": "H10"
         },
-        "hanaNumber": {
+        "HANANumber": {
             "type": "string",
             "metadata": {
                 "description": "SAP HANA Instance Number"
