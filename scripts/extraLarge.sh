@@ -51,11 +51,18 @@ UserTasksMax=infinity\n/g"
 cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
 cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
+number="$(lsscsi [*] 0 0 4| cut -c2)"
+
 echo "logicalvols start" >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefghijklmn]
-  vgcreate hanavg /dev/sd[jklmn]
+  hanavg1lun="$(lsscsi $number 0 0 7 | grep -o '.\{9\}$')"
+  hanavg2lun="$(lsscsi $number 0 0 8 | grep -o '.\{9\}$')"
+  hanavg3lun="$(lsscsi $number 0 0 9 | grep -o '.\{9\}$')"
+  hanavg4lun="$(lsscsi $number 0 0 10 | grep -o '.\{9\}$')"
+  hanavg5lun="$(lsscsi $number 0 0 11 | grep -o '.\{9\}$')"
+  vgcreate hanavg $hanavg1lun $hanavg2lun $hanavg3lun $hanavg4lun $hanavg5lun
   lvcreate -l 80%FREE -n datalv hanavg
-  lvcreate -l 20%FREE -n loglv hanavg
+  lvcreate -l 20%VG -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
   mkfs.xfs /dev/hanavg/loglv
 echo "logicalvols end" >> /tmp/parameter.txt
@@ -63,9 +70,16 @@ echo "logicalvols end" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
-  vgcreate sharedvg /dev/sdc 
-  vgcreate backupvg /dev/sd[efghi]  
-  vgcreate usrsapvg /dev/sdd 
+  sharedvglun="$(lsscsi $number 0 0 0 | grep -o '.\{9\}$')"
+  usrsapvglun="$(lsscsi $number 0 0 1 | grep -o '.\{9\}$')"
+  backupvglun1="$(lsscsi $number 0 0 2 | grep -o '.\{9\}$')"
+  backupvglun2="$(lsscsi $number 0 0 3 | grep -o '.\{9\}$')"
+  backupvglun3="$(lsscsi $number 0 0 4 | grep -o '.\{9\}$')"
+  backupvglun4="$(lsscsi $number 0 0 5 | grep -o '.\{9\}$')"
+  backupvglun5="$(lsscsi $number 0 0 6 | grep -o '.\{9\}$')"
+  vgcreate backupvg $backupvglun1 $backupvglun2 $backupvglun3 $backupvglun4 $backupvglun5
+  vgcreate sharedvg $sharedvglun
+  vgcreate usrsapvg $usrsapvglun
   lvcreate -l 100%FREE -n sharedlv sharedvg 
   lvcreate -l 100%FREE -n backuplv backupvg 
   lvcreate -l 100%FREE -n usrsaplv usrsapvg 

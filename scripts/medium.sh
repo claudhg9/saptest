@@ -51,11 +51,14 @@ UserTasksMax=infinity\n/g"
 cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
 cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
+number="$(lsscsi [*] 0 0 4| cut -c2)"
 echo "logicalvols start" >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefgh]
-  vgcreate hanavg /dev/sd[gh]
+  hanavg1lun="$(lsscsi $number 0 0 4 | grep -o '.\{9\}$')"
+  hanavg2lun="$(lsscsi $number 0 0 5 | grep -o '.\{9\}$')"
+  vgcreate hanavg $hanavg1lun $hanavg2lun
   lvcreate -l 80%FREE -n datalv hanavg
-  lvcreate -l 20%FREE -n loglv hanavg
+  lvcreate -l 20%VG -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
   mkfs.xfs /dev/hanavg/loglv
 echo "logicalvols end" >> /tmp/parameter.txt
@@ -63,9 +66,13 @@ echo "logicalvols end" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
-  vgcreate sharedvg /dev/sdc 
-  vgcreate backupvg /dev/sd[ef]  
-  vgcreate usrsapvg /dev/sdd 
+  sharedvglun="$(lsscsi $number 0 0 0 | grep -o '.\{9\}$')"
+  usrsapvglun="$(lsscsi $number 0 0 1 | grep -o '.\{9\}$')"
+  backupvglun1="$(lsscsi $number 0 0 2 | grep -o '.\{9\}$')"
+  backupvglun2="$(lsscsi $number 0 0 3 | grep -o '.\{9\}$')"
+  vgcreate backupvg $backupvglun1 $backupvglun2
+  vgcreate sharedvg $sharedvglun
+  vgcreate usrsapvg $usrsapvglun 
   lvcreate -l 100%FREE -n sharedlv sharedvg 
   lvcreate -l 100%FREE -n backuplv backupvg 
   lvcreate -l 100%FREE -n usrsaplv usrsapvg 
@@ -84,6 +91,14 @@ mount -t xfs /dev/hanavg/datalv /hana/data
 mount -t xfs /dev/hanavg/loglv /hana/log 
 mkdir /hana/data/sapbits
 echo "mounthanashared end" >> /tmp/parameter.txt
+
+echo "write to fstab start" >> /tmp/parameter.txt
+echo "/dev/mapper/hanavg-datalv /hana/data xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/hanavg-loglv /hana/log xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/sharedvg-sharedlv /hana/shared xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/backupvg-backuplv /hana/backup xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/usrsapvg-usrsaplv /usr/sap xfs defaults 0 0" >> /etc/fstab
+echo "write to fstab end" >> /tmp/parameter.txt
 
 if [ ! -d "/hana/data/sapbits" ]
  then

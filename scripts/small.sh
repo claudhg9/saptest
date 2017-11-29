@@ -85,6 +85,14 @@ mount -t xfs /dev/hanavg/loglv /hana/log
 mkdir /hana/data/sapbits
 echo "mounthanashared end" >> /tmp/parameter.txt
 
+echo "write to fstab start" >> /tmp/parameter.txt
+echo "/dev/mapper/hanavg-datalv /hana/data xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/hanavg-loglv /hana/log xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/sharedvg-sharedlv /hana/shared xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/backupvg-backuplv /hana/backup xfs defaults 0 0" >> /etc/fstab
+echo "/dev/mapper/usrsapvg-usrsaplv /usr/sap xfs defaults 0 0" >> /etc/fstab
+echo "write to fstab end" >> /tmp/parameter.txt
+
 if [ ! -d "/hana/data/sapbits" ]
  then
  mkdir "/hana/data/sapbits"
