@@ -44,11 +44,12 @@ sedcmd2="s/ResourceDisk.SwapSizeMB=16384/ResourceDisk.SwapSizeMB=16384/g"
 cat /etc/waagent.conf | sed $sedcmd | sed $sedcmd2 > /etc/waagent.conf.new
 cp -f /etc/waagent.conf.new /etc/waagent.conf
 
+number="$(lsscsi [*] 0 0 4| cut -c2)"
 
 echo "logicalvols start" >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefg]
-  hanavg1lun="$(lsscsi 5 0 0 3 | grep -o '.\{9\}$')"
-  hanavg2lun="$(lsscsi 5 0 0 4 | grep -o '.\{9\}$')"
+  hanavg1lun="$(lsscsi $number 0 0 3 | grep -o '.\{9\}$')"
+  hanavg2lun="$(lsscsi $number 0 0 4 | grep -o '.\{9\}$')"
   vgcreate hanavg $hanavg1lun $hanavg2lun
   lvcreate -l 80%FREE -n datalv hanavg
   lvcreate -l 20%VG -n loglv hanavg
@@ -59,9 +60,9 @@ echo "logicalvols end" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
-  sharedvglun="$(lsscsi 5 0 0 0 | grep -o '.\{9\}$')"
-  usrsapvglun="$(lsscsi 5 0 0 1 | grep -o '.\{9\}$')"
-  backupvglun="$(lsscsi 5 0 0 2 | grep -o '.\{9\}$')"
+  sharedvglun="$(lsscsi $number 0 0 0 | grep -o '.\{9\}$')"
+  usrsapvglun="$(lsscsi $number 0 0 1 | grep -o '.\{9\}$')"
+  backupvglun="$(lsscsi $number 0 0 2 | grep -o '.\{9\}$')"
   vgcreate backupvg $backupvglun
   vgcreate sharedvg $sharedvglun
   vgcreate usrsapvg $usrsapvglun 
