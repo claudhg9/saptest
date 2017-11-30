@@ -64,7 +64,24 @@
             "metadata": {
                 "description": "Size of VM to deploy"
             }
-        }
+        },
+        "IPAllocationMethod": {
+            "type": "string",
+            "allowedValues" : [
+              "Dynamic",
+              "Static"
+            ],
+            "metadata": {
+                "description": "IP Allocation Method"
+          }
+        },
+        "StaticIP": {
+          "type": "string",
+          "metadata": {
+            "description": "IP Address for the HANA VM when Static IP Allocation Method has been selected"
+          },
+          "defaultValue": "10.0.5.4"
+        }    
     
     },
     "variables": {
@@ -91,22 +108,46 @@
       },
     "resources": [
         {
+            "condition": "[equals(parameters('IPAllocationMethod'), 'Dynamic')]",
             "apiVersion": "[variables('api-version')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('nicName')]",
+            "name": "[concat(variables('nicName'),'-dynamic')]",
             "location": "[resourceGroup().location]",
             "properties": {
-                "ipConfigurations": [{
-                    "name": "ipconfig1",
-                    "properties": {
-                        "privateIPAllocationMethod": "Dynamic",
-                        "subnet": {
-                            "id": "[variables('subnetRef')]"
-                        }
+              "ipConfigurations": [
+                {
+                  "name": "ipconfig1",
+                  "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                      "id": "[variables('subnetRef')]"
                     }
-                }]
+                  }
+                }
+              ]
             }
-        },
+          },
+          {
+            "condition": "[equals(parameters('IPAllocationMethod'), 'Static')]",
+            "apiVersion": "[variables('api-version')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(variables('nicName'),'-static')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+              "ipConfigurations": [
+                {
+                  "name": "ipconfig1",
+                  "properties": {
+                    "privateIPAllocationMethod": "Static",
+                    "privateIPAddress": "[parameters('StaticIP')]",
+                    "subnet": {
+                      "id": "[variables('subnetRef')]"
+                    }
+                  }
+                }
+              ]
+            }
+          },
         {
             "type": "Microsoft.Compute/disks",
             "name": "[concat(parameters('vmName'),'-shared')]",
