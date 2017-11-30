@@ -14,32 +14,10 @@
                 "description": "Uri for SAP Bits"
             }
         },
-        "networkName": {
+        "HANAsubnetRef": {
             "type": "string",
-            "defaultValue": "ra-sap-hana-vnet",
             "metadata": {
-                "description": "The Hana vNet"
-            }
-        },
-        "addressPrefixes": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/16",
-            "metadata": {
-                "description": "The Hana vNET prefix"
-            }
-        },
-        "subnetName": {
-            "type": "string",
-            "defaultValue": "SAPDataSubnet",
-            "metadata": {
-                "description": "The Hana subnet name"
-            }
-        },
-        "subnetPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.5.0/24",
-            "metadata": {
-                "description": "The data subnet"
+                "description": "The Hana subnet reference ID"
             }
         },
         "OperatingSystem": {
@@ -94,8 +72,7 @@
         "vmPassword": "HANA07061992!",
         "mode": "Push",
         "nicName": "[parameters('vmName')]",
-        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('networkName'))]",
-        "subnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('subnetName'))]",
+        "subnetRef": "[parameters('HANAsubnetRef')]",
         "OperatingSystemSpec":{
             "imagePublisher":"[if (contains(parameters('OperatingSystem'),'SLES'),'SUSE','RedHat')]",
             "imageOffer":"[if (contains(parameters('OperatingSystem'),'SLES'),'SLES-SAP','RHEL-SAP-HANA')]",
