@@ -136,8 +136,8 @@
     "hanajbUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/hanajb.json",
     "hanaUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/hanastudio.ps1",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('networkName'))]",
-    "HANAsubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('HANASubnetName')),concat(resourceId(parameters('existingVnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('HANASubnetName')))]",
-    "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('existingVnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('ManagementSubnetName')))]"
+    "HANAsubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('HANASubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('HANASubnetName')))]",
+    "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('ManagementSubnetName')))]"
   },
     "resources": [
 
