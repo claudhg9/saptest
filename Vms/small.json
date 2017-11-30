@@ -129,7 +129,7 @@
       "condition": "[equals(parameters('IPAllocationMethod'), 'Dynamic')]",
       "apiVersion": "[variables('api-version')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(variables('vmName'),'-dynamic')]",
+      "name": "[concat(parameters('vmName'),'-dynamic')]",
       "location": "[resourceGroup().location]",
       "properties": {
         "ipConfigurations": [
@@ -149,7 +149,7 @@
       "condition": "[equals(parameters('IPAllocationMethod'), 'Static')]",
       "apiVersion": "[variables('api-version')]",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(variables('vmName'),'-static')]",
+      "name": "[concat(parameters('vmName'),'-static')]",
       "location": "[resourceGroup().location]",
       "properties": {
         "ipConfigurations": [
