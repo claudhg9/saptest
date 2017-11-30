@@ -32,7 +32,7 @@
                 "Standard_E64s_v3"
             ]
         },
-        "NetworkName": {
+        "networkName": {
             "type": "string",
             "defaultValue": "ra-sap-hana-vnet",
             "metadata": {
