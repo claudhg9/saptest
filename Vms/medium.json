@@ -238,7 +238,7 @@
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup1'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup2'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data1'))]",
-"[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data2'))]"
+                "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data2'))]"
             ],
             "properties": {
                 "hardwareProfile": {
