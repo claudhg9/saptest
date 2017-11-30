@@ -89,7 +89,7 @@
         "api-version-vm": "2017-03-30",
         "vmPassword": "HANA07061992!",
         "mode": "Push",
-        "nicName": "[parameters('vmName')]",
+        "nicName": "[if(equals(parameters('IPAllocationMethod'),'Static'),concat(parameters('vmName'),'-static'),concat(parameters('vmName'),'-dynamic')]",
         "subnetRef": "[parameters('HANAsubnetRef')]",
         "OperatingSystemSpec":{
             "imagePublisher":"[if (contains(parameters('OperatingSystem'),'SLES'),'SUSE','RedHat')]",
