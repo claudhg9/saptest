@@ -46,18 +46,32 @@
                 "description": "The HANA VNET prefix"
             }
         },
-        "subnetName": {
+        "HANASubnetName": {
             "type": "string",
             "defaultValue": "SAPDataSubnet",
             "metadata": {
-                "description": "The HANA subnet name"
+                "description": "The data subnet name"
             }
         },
-        "subnetPrefix": {
+        "HANASubnetPrefix": {
             "type": "string",
             "defaultValue": "10.0.5.0/24",
             "metadata": {
                 "description": "The data subnet prefix"
+            }
+        },
+        "ManagementSubnetName": {
+            "type": "string",
+            "defaultValue": "SAPMgmtSubnet",
+            "metadata": {
+                "description": "The management subnet name"
+            }
+        },
+        "ManagementSubnetPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.6.0/24",
+            "metadata": {
+                "description": "The management subnet prefix"
             }
         },
         "customURI": {
@@ -74,7 +88,7 @@
             "defaultValue": "testuser"
         },
         "VMPassword": {
-            "type": "string",
+            "type": "securestring",
             "metadata": {
                 "description": "Password for the Virtual Machine"
             },
@@ -104,7 +118,14 @@
                 "description": "SAP HANA Instance Number"
             },
             "defaultValue": "00"
-        }              
+        },
+        "ExistingNetworkResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "SAP HANA Instance Number"
+            },
+            "defaultValue": "no"
+        }               
     },
   "variables": {
     "vmName": "[toLower(parameters('vmName'))]",
@@ -113,11 +134,15 @@
     "largeUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/large.json",
     "extralargeUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/extralarge.json')]",
     "hanajbUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/hanajb.json",
-    "hanaUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/hanastudio.ps1"
+    "hanaUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/hanastudio.ps1",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('networkName'))]",
+    "HANAsubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('HANASubnetName')),concat(resourceId(parameters('existingVnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('HANASubnetName')))]",
+    "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('existingVnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('ManagementSubnetName')))]"
   },
     "resources": [
 
         {
+        "condition": "[equals(parameters('ExistingNetworkResourceGroup'), 'no')]",
         "apiVersion": "2016-09-01",
         "type": "Microsoft.Network/virtualNetworks",
         "name": "[parameters('networkName')]",
@@ -130,11 +155,17 @@
           },
           "subnets": [
             {
-              "name": "[parameters('subnetName')]",
+              "name": "[parameters('HANASubnetName')]",
               "properties": {
-                "addressPrefix": "[parameters('subnetPrefix')]"
+                "addressPrefix": "[parameters('HANASubnetPrefix')]"
               }
-            }
+            },
+            {
+                "name": "[parameters('ManagementSubnetName')]",
+                "properties": {
+                  "addressPrefix": "[parameters('ManagementSubnetPrefix')]"
+                }
+              }
           ]
         }
       },
@@ -158,17 +189,8 @@
                     "customUri": {
                         "value": "[parameters('customUri')]"
                     },
-                    "networkName": {
-                        "value": "[parameters('networkName')]"
-                    },
-                    "addressPrefixes":{
-                        "value": "[parameters('addressPrefixes')]"
-                    },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
-                    },
-                    "subnetPrefix": {
-                        "value": "[parameters('subnetPrefix')]"
+                    "HANAsubnetRef": {
+                        "value": "[variables('HANAsubnetRef')]"
                     },
                     "OperatingSystem": {
                         "value": "[parameters('OperatingSystem')]"
@@ -211,17 +233,8 @@
                     "customUri": {
                         "value": "[parameters('customUri')]"
                     },
-                    "networkName": {
-                        "value": "[parameters('networkName')]"
-                    },
-                    "addressPrefixes":{
-                        "value": "[parameters('addressPrefixes')]"
-                    },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
-                    },
-                    "subnetPrefix": {
-                        "value": "[parameters('subnetPrefix')]"
+                    "HANAsubnetRef": {
+                        "value": "[parameters('HANAsubnetRef')]"
                     },
                     "OperatingSystem": {
                         "value": "[parameters('OperatingSystem')]"
@@ -264,17 +277,8 @@
                     "customUri": {
                         "value": "[parameters('customUri')]"
                     },
-                    "networkName": {
-                        "value": "[parameters('networkName')]"
-                    },
-                    "addressPrefixes":{
-                        "value": "[parameters('addressPrefixes')]"
-                    },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
-                    },
-                    "subnetPrefix": {
-                        "value": "[parameters('subnetPrefix')]"
+                    "HANAsubnetRef": {
+                        "value": "[variables('HANAsubnetRef')]"
                     },
                     "OperatingSystem": {
                         "value": "[parameters('OperatingSystem')]"
@@ -320,14 +324,8 @@
                     "networkName": {
                         "value": "[parameters('networkName')]"
                     },
-                    "addressPrefixes":{
-                        "value": "[parameters('addressPrefixes')]"
-                    },
-                    "subnetName": {
-                        "value": "[parameters('subnetName')]"
-                    },
-                    "subnetPrefix": {
-                        "value": "[parameters('subnetPrefix')]"
+                    "HANAsubnetRef": {
+                        "value": "[variables('HANAsubnetRef')]"
                     },
                     "OperatingSystem": {
                         "value": "[parameters('OperatingSystem')]"
@@ -364,18 +362,10 @@
               "uri": "[variables('hanajbUri')]"
             },
             "parameters": {
-              "networkName": {
-                "value": "[parameters('networkName')]"
-              },
-              "addressPrefixes": {
-                "value": "[parameters('addressPrefixes')]"
-              },
-              "subnetName": {
-                "value": "[parameters('subnetName')]"
-              },
-              "subnetPrefix": {
-                "value": "[parameters('subnetPrefix')]"
-              },
+              
+                "mgmtSubnetRef": {
+                    "value": "[variables('mgmtSubnetRef')]"
+                },
               "vmUserName": {
                 "value": "[parameters('vmUserName')]"
               },
