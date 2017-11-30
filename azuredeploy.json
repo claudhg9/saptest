@@ -32,7 +32,7 @@
                 "Standard_E64s_v3"
             ]
         },
-        "networkName": {
+        "NetworkName": {
             "type": "string",
             "defaultValue": "ra-sap-hana-vnet",
             "metadata": {
@@ -125,6 +125,24 @@
                 "description": "SAP HANA Instance Number"
             },
             "defaultValue": "no"
+        },
+        "IPAllocationMethod": {
+            "type": "string",
+            "allowedValues" : [
+              "Dynamic",
+              "Static"
+            ],
+            "metadata": {
+                "description": "IP Allocation Method"
+          },
+          "defaultValue": "Dynamic"
+        },
+        "StaticIP": {
+          "type": "string",
+          "metadata": {
+            "description": "IP Address for the HANA VM when Static IP Allocation Method has been selected"
+          },
+          "defaultValue": "10.0.5.4"
         }               
     },
   "variables": {
@@ -133,11 +151,11 @@
     "mediumUri": "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/Vms/medium.json",
     "largeUri": "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/Vms/large.json",
     "extralargeUri": "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/Vms/extralarge.json')]",
-    "hanajbUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/Vms/hanajb.json",
+    "hanajbUri": "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/Vms/hanajb.json",
     "hanaUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/hanastudio.ps1",
-    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('networkName'))]",
-    "HANAsubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('HANASubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('HANASubnetName')))]",
-    "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('networkName')), '/subnets/',parameters('ManagementSubnetName')))]"
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('NetworkName'))]",
+    "HANAsubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('HANASubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('NetworkName')), '/subnets/',parameters('HANASubnetName')))]",
+    "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('NetworkName')), '/subnets/',parameters('ManagementSubnetName')))]"
   },
     "resources": [
 
@@ -145,7 +163,7 @@
         "condition": "[equals(parameters('ExistingNetworkResourceGroup'), 'no')]",
         "apiVersion": "2016-09-01",
         "type": "Microsoft.Network/virtualNetworks",
-        "name": "[parameters('networkName')]",
+        "name": "[parameters('NetworkName')]",
         "location": "[resourceGroup().location]",
         "properties": {
           "addressSpace": {
@@ -175,7 +193,7 @@
             "name": "SmallLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('NetworkName'))]"
               ],
             "properties": {
                 "mode": "Incremental",
@@ -209,6 +227,12 @@
                     },
                     "vmSize": {
                         "value": "[parameters('vmSize')]"
+                    },
+                    "IPAllocationMethod":{
+                        "value": "[parameters('IPAllocationMethod')]"
+                    },
+                    "StaticIP":{
+                        "value": "[parameters('StaticIP')]"
                     }
                 }
             }
@@ -219,7 +243,7 @@
             "name": "MediumLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('NetworkName'))]"
               ],
             "properties": {
                 "mode": "Incremental",
@@ -253,6 +277,12 @@
                     },
                     "vmSize": {
                         "value": "[parameters('vmSize')]"
+                    },
+                    "IPAllocationMethod":{
+                        "value": "[parameters('IPAllocationMethod')]"
+                    },
+                    "StaticIP":{
+                        "value": "[parameters('StaticIP')]"
                     }
                 }
             }
@@ -263,7 +293,7 @@
             "name": "LargeLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('NetworkName'))]"
               ],
             "properties": {
                 "mode": "Incremental",
@@ -297,6 +327,12 @@
                     },
                     "vmSize": {
                         "value": "[parameters('vmSize')]"
+                    },
+                    "IPAllocationMethod":{
+                        "value": "[parameters('IPAllocationMethod')]"
+                    },
+                    "StaticIP":{
+                        "value": "[parameters('StaticIP')]"
                     }
                 }
             }
@@ -307,7 +343,7 @@
             "name": "extralargeLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('NetworkName'))]"
               ],
             "properties": {
                 "mode": "Incremental",
@@ -320,9 +356,6 @@
                     },
                     "customUri": {
                         "value": "[parameters('customUri')]"
-                    },
-                    "networkName": {
-                        "value": "[parameters('networkName')]"
                     },
                     "HANAsubnetRef": {
                         "value": "[variables('HANAsubnetRef')]"
@@ -344,6 +377,12 @@
                     },
                     "vmSize": {
                         "value": "[parameters('vmSize')]"
+                    },
+                    "IPAllocationMethod":{
+                        "value": "[parameters('IPAllocationMethod')]"
+                    },
+                    "StaticIP":{
+                        "value": "[parameters('StaticIP')]"
                     }
                 }
             }
@@ -354,7 +393,7 @@
             "name": "HANAjbLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
             "dependsOn": [
-                "[concat('Microsoft.Network/virtualNetworks/', parameters('networkName'))]"
+                "[concat('Microsoft.Network/virtualNetworks/', parameters('NetworkName'))]"
               ],
           "properties": {
             "mode": "Incremental",
