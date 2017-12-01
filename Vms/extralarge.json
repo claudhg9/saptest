@@ -86,7 +86,6 @@
     "variables": {
         "api-version": "2017-06-01",
         "api-version-vm": "2017-03-30",
-        "vmPassword": "HANA07061992!",
         "mode": "Push",
         "nicName": "[if(equals(parameters('IPAllocationMethod'),'Static'),concat(parameters('vmName'),'-static'),concat(parameters('vmName'),'-dynamic'))]",
         "subnetRef": "[parameters('HANAsubnetRef')]",
@@ -117,7 +116,7 @@
             "condition": "[equals(parameters('IPAllocationMethod'), 'Dynamic')]",
             "apiVersion": "[variables('api-version')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('nicName'),'-dynamic')]",
+            "name": "[concat(parameters('vmName'),'-dynamic')]",
             "location": "[resourceGroup().location]",
             "properties": {
               "ipConfigurations": [
@@ -137,7 +136,7 @@
             "condition": "[equals(parameters('IPAllocationMethod'), 'Static')]",
             "apiVersion": "[variables('api-version')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('nicName'),'-static')]",
+            "name": "[concat(parameters('vmName'),'-static')]",
             "location": "[resourceGroup().location]",
             "properties": {
               "ipConfigurations": [
