@@ -53,9 +53,9 @@ cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
 number="$(lsscsi [*] 0 0 4| cut -c2)"
 echo "logicalvols start" >> /tmp/parameter.txt
-  pvcreate /dev/sd[cdefgh]
   hanavg1lun="$(lsscsi $number 0 0 4 | grep -o '.\{9\}$')"
   hanavg2lun="$(lsscsi $number 0 0 5 | grep -o '.\{9\}$')"
+  pvcreate hanavg $hanavg1lun $hanavg2lun
   vgcreate hanavg $hanavg1lun $hanavg2lun
   lvcreate -l 80%FREE -n datalv hanavg
   lvcreate -l 20%VG -n loglv hanavg
@@ -70,6 +70,7 @@ echo "logicalvols2 start" >> /tmp/parameter.txt
   usrsapvglun="$(lsscsi $number 0 0 1 | grep -o '.\{9\}$')"
   backupvglun1="$(lsscsi $number 0 0 2 | grep -o '.\{9\}$')"
   backupvglun2="$(lsscsi $number 0 0 3 | grep -o '.\{9\}$')"
+  pvcreate $backupvglun1 $backupvglun2 $sharedvglun $usrsapvglun
   vgcreate backupvg $backupvglun1 $backupvglun2
   vgcreate sharedvg $sharedvglun
   vgcreate usrsapvg $usrsapvglun 
@@ -115,7 +116,7 @@ echo "hana download start" >> /tmp/parameter.txt
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part2.rar
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part3.rar
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part4.rar
-/usr/bin/wget --quiet $Uri/SapBits/hdbinst.cfg
+/usr/bin/wget --quiet "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/hdbinst.cfg"
 echo "hana download end" >> /tmp/parameter.txt
 
 date >> /tmp/testdate
