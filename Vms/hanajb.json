@@ -2,40 +2,18 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
   "parameters": {
-    "networkName": {
-      "type": "string",
-      "defaultValue": "ra-sap-hana-vnet",
-      "metadata": {
-        "description": "The Hana vNet"
-      }
-    },
-    "addressPrefixes": {
-      "type": "string",
-      "defaultValue": "10.0.0.0/16",
-      "metadata": {
-        "description": "The Hana vNET prefix"
-      }
-    },
-    "subnetName": {
-      "type": "string",
-      "defaultValue": "SAPDataSubnet",
-      "metadata": {
-        "description": "The Hana subnet name"
-      }
-    },
-    "subnetPrefix": {
-      "type": "string",
-      "defaultValue": "10.0.5.0/24",
-      "metadata": {
-        "description": "The data subnet"
-      }
-    },
     "vmUserName": {
       "type": "string",
       "metadata": {
         "description": "Username for the Virtual Machine"
       },
       "defaultValue": "testuser"
+    },
+    "mgmtSubnetRef": {
+        "type": "string",
+        "metadata": {
+            "description": "The Hana subnet reference ID"
+        }
     },
     "vmPassword": {
       "type": "string",
@@ -52,7 +30,7 @@
     }
   },
     "variables": {
-        "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('NetworkName'), parameters('subnetName'))]",
+        "subnetRef": "[parameters('mgmtSubnetRef')]",
         "vmName": "hanajb",
         "vNicName": "hanajbnic",
         "PIPName": "hanajbpip",
@@ -60,7 +38,7 @@
         "scriptFolder": ".",
         "scriptFileName": "hanastudio.ps1",
         "scriptParameters": "[concat(' -BaseURI ', parameters('customUri'))]",
-        "fileuri":"[concat(parameters('customUri') , '/hanastudio.ps1')]"
+        "fileuri":"https://raw.githubusercontent.com/claudhg9/saptest/master/hanastudio.ps1"
         
     },
     "resources": [
