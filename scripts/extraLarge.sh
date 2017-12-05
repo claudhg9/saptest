@@ -54,12 +54,12 @@ cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 number="$(lsscsi [*] 0 0 4| cut -c2)"
 
 echo "logicalvols start" >> /tmp/parameter.txt
-  pvcreate /dev/sd[cdefghijklmn]
   hanavg1lun="$(lsscsi $number 0 0 7 | grep -o '.\{9\}$')"
   hanavg2lun="$(lsscsi $number 0 0 8 | grep -o '.\{9\}$')"
   hanavg3lun="$(lsscsi $number 0 0 9 | grep -o '.\{9\}$')"
   hanavg4lun="$(lsscsi $number 0 0 10 | grep -o '.\{9\}$')"
   hanavg5lun="$(lsscsi $number 0 0 11 | grep -o '.\{9\}$')"
+  pvcreate $hanavg1lun $hanavg2lun $hanavg3lun $hanavg4lun $hanavg5lun
   vgcreate hanavg $hanavg1lun $hanavg2lun $hanavg3lun $hanavg4lun $hanavg5lun
   lvcreate -l 80%FREE -n datalv hanavg
   lvcreate -l 20%VG -n loglv hanavg
@@ -77,6 +77,7 @@ echo "logicalvols2 start" >> /tmp/parameter.txt
   backupvglun3="$(lsscsi $number 0 0 4 | grep -o '.\{9\}$')"
   backupvglun4="$(lsscsi $number 0 0 5 | grep -o '.\{9\}$')"
   backupvglun5="$(lsscsi $number 0 0 6 | grep -o '.\{9\}$')"
+  pvcreate $backupvglun1 $backupvglun2 $backupvglun3 $backupvglun4 $backupvglun5 $sharedvglun $usrsapvglun
   vgcreate backupvg $backupvglun1 $backupvglun2 $backupvglun3 $backupvglun4 $backupvglun5
   vgcreate sharedvg $sharedvglun
   vgcreate usrsapvg $usrsapvglun
@@ -114,7 +115,7 @@ echo "hana download start" >> /tmp/parameter.txt
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part2.rar
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part3.rar
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part4.rar
-/usr/bin/wget --quiet $Uri/SapBits/hdbinst.cfg
+/usr/bin/wget --quiet "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/hdbinst.cfg"
 echo "hana download end" >> /tmp/parameter.txt
 
 date >> /tmp/testdate
