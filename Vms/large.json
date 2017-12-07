@@ -88,7 +88,7 @@
         "api-version-vm": "2017-03-30",
         "vmPassword": "HANA07061992!",
         "mode": "Push",
-        "nicName": "[if(equals(parameters('IPAllocationMethod'),'Static'),concat(parameters('vmName'),'-static'),concat(parameters('vmName'),'-dynamic'))]",
+        "nicName": "[if(equals(parameters('IPAllocationMethod'),'Static'),concat(parameters('vmName'),'-static'),concat(parameters('vmName'),'-dynamic')]",
         "subnetRef": "[parameters('HANAsubnetRef')]",
         "OperatingSystemSpec":{
             "imagePublisher":"[if (contains(parameters('OperatingSystem'),'SLES'),'SUSE','RedHat')]",
@@ -99,9 +99,8 @@
         "diskConfig_Standard_M64ms": {
             "shared": 1023,
             "sap": 63,
-            "backup": 1023,
-            "backup2": 1023,
-            "backup3": 1023,
+            "backup": 2047,
+            "backup2": 2047,
             "data1": 1023,
             "data2": 1023,
             "data3": 1023
@@ -109,9 +108,8 @@
         "diskConfig_Standard_M128s": {
             "shared": 1023,
             "sap": 63,
-            "backup": 1023,
-            "backup2": 1023,
-            "backup3": 1023,
+            "backup": 2047,
+            "backup2": 2047,
             "data1": 1023,
             "data2": 1023,
             "data3": 1023
@@ -225,22 +223,6 @@
         },
         {
             "type": "Microsoft.Compute/disks",
-            "name": "[concat(parameters('vmName'),'-backup3')]",
-            "apiVersion": "[variables('api-version-vm')]",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "properties": {
-                "creationData": {
-                    "createOption": "Empty"
-                },
-                "diskSizeGB": "[variables('diskConfig').backup3]"
-            }
-        },
-        {
-            "type": "Microsoft.Compute/disks",
             "name": "[concat(parameters('vmName'),'-data1')]",
             "apiVersion": "[variables('api-version-vm')]",
             "location": "[resourceGroup().location]",
@@ -298,7 +280,6 @@
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-sap'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup1'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup2'))]",
-                "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup3'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data1'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data2'))]",
                 "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data3'))]"
@@ -354,25 +335,18 @@
                         "lun": 4,
                         "createOption": "attach",
                         "managedDisk": {
-                            "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-backup3'))]"
+                            "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data1'))]"
                         }
                     },
                     {
                         "lun": 5,
                         "createOption": "attach",
                         "managedDisk": {
-                            "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data1'))]"
-                        }
-                    },
-                    {
-                        "lun": 6,
-                        "createOption": "attach",
-                        "managedDisk": {
                             "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data2'))]"
                         }
                     },
                     {
-                        "lun": 7,
+                        "lun": 6,
                         "createOption": "attach",
                         "managedDisk": {
                             "id": "[resourceId('Microsoft.Compute/disks/', concat(parameters('vmName'),'-data3'))]"
