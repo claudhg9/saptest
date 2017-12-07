@@ -2,7 +2,7 @@
 # SAP HANA ARM Installation
 This ARM template is used to install SAP HANA on a single VM running SUSE SLES 12 SP 2 or Red Hat Enterprise Linux . It uses the Azure SKU for SAP. **We will be adding additional SKUs and Linux flavors in future Versions.** The template takes advantage of [Custom Script Extensions](https://github.com/Azure/azure-linux-extensions/tree/master/CustomScript) for the installation and configuration of the machine.
 
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2claudhg9%2saptest%2blob%2master-subnet%2azuredeploy.json)
+[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2claudhg9%2saptest%2master-subnet%2azuredeploy.json)
 
 
 ## Machine Info
