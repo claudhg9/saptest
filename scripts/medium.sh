@@ -148,3 +148,5 @@ echo "install hana start" >> /tmp/parameter.txt
 cd /hana/data/sapbits/51052325/DATA_UNITS/HDB_LCM_LINUX_X86_64
 /hana/data/sapbits/51052325/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --configfile /hana/data/sapbits/hdbinst-local.cfg
 echo "install hana end" >> /tmp/parameter.txt
+
+shutdown -r 1

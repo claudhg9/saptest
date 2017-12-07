@@ -54,9 +54,9 @@ cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 number="$(lsscsi [*] 0 0 4| cut -c2)"
 
 echo "logicalvols start" >> /tmp/parameter.txt
-  hanavg1lun="$(lsscsi $number 0 0 5 | grep -o '.\{9\}$')"
-  hanavg2lun="$(lsscsi $number 0 0 6 | grep -o '.\{9\}$')"
-  hanavg3lun="$(lsscsi $number 0 0 7 | grep -o '.\{9\}$')"
+  hanavg1lun="$(lsscsi $number 0 0 4 | grep -o '.\{9\}$')"
+  hanavg2lun="$(lsscsi $number 0 0 5 | grep -o '.\{9\}$')"
+  hanavg3lun="$(lsscsi $number 0 0 6 | grep -o '.\{9\}$')"
   pvcreate $hanavg1lun $hanavg2lun $hanavg3lun
   vgcreate hanavg $hanavg1lun $hanavg2lun $hanavg3lun
   lvcreate -l 80%FREE -n datalv hanavg
@@ -72,8 +72,7 @@ echo "logicalvols2 start" >> /tmp/parameter.txt
   usrsapvglun="$(lsscsi $number 0 0 1 | grep -o '.\{9\}$')"
   backupvglun1="$(lsscsi $number 0 0 2 | grep -o '.\{9\}$')"
   backupvglun2="$(lsscsi $number 0 0 3 | grep -o '.\{9\}$')"
-  backupvglun3="$(lsscsi $number 0 0 4 | grep -o '.\{9\}$')"
-  pvcreate $backupvglun1 $backupvglun2 $backupvglun3 $sharedvglun $usrsapvglun
+  pvcreate $backupvglun1 $backupvglun2 $sharedvglun $usrsapvglun
   vgcreate backupvg $backupvglun1 $backupvglun2 $backupvglun3
   vgcreate sharedvg $sharedvglun
   vgcreate usrsapvg $usrsapvglun
@@ -143,3 +142,5 @@ echo "install hana start" >> /tmp/parameter.txt
 cd /hana/data/sapbits/51052325/DATA_UNITS/HDB_LCM_LINUX_X86_64
 /hana/data/sapbits/51052325/DATA_UNITS/HDB_LCM_LINUX_X86_64/hdblcm -b --configfile /hana/data/sapbits/hdbinst-local.cfg
 echo "install hana end" >> /tmp/parameter.txt
+
+shutdown -r 1
