@@ -22,11 +22,11 @@ Click on Create:
 Fill in the required information and click create. The name of the storage account has to be unique and only accepts lowercase letters and numbers:
 
 
-<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload5.png" height="480">
+<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload5.png">
 
 Once the deployment has completed click on Go to resource:
 
-<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload6.png" height="480">
+<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload6.png">
 
 Click on Blobs:
 
