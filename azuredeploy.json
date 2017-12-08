@@ -8,7 +8,7 @@
                 "description": "VM Name"
             }
         },
-        "HANAjumpbox": {
+        "HANAJumpbox": {
             "type": "string",
             "metadata": {
                 "description": "Choose whether to deploy a VM with HANA Studio installed"
