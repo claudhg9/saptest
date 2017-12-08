@@ -73,7 +73,9 @@ az group deployment create \
     --template-uri "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/azuredeploy.json" \
     --parameters VMName=HANAtestVM HANAJumpbox=yes CustomURI=https://yourBlobName.blob.core.windows.net/yourContainerName VMPassword=AweS0me@PW
 ```
+## Monitoring
 
+For your deployment to be supported by SAP the Azure Enhanced Monitoring Extension must be enabled on the Virtual Machine. Please refer to the following [blog post](https://blogs.msdn.microsoft.com/saponsqlserver/2016/05/16/new-azure-powershell-cmdlets-for-azure-enhanced-monitoring/) for more information on how to enable it.
 
 ## Parameters
 
