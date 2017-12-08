@@ -23,16 +23,16 @@
             "metadata": {
                 "description": "VM Size"
             },
-            "defaultValue": "Standard_GS5",
+            "defaultValue": "Standard_GS5 (448 GB, Certified)",
             "allowedValues": [
-                "Standard_GS5",
-                "Standard_M64s",
-                "Standard_M64ms",
-                "Standard_M128s",
-                "Standard_M128ms",
-                "Standard_E16s_v3",
-                "Standard_E32s_v3",
-                "Standard_E64s_v3"
+                "Standard_GS5 (448 GB, Certified)",
+                "Standard_M64s (1 TB)",
+                "Standard_M64ms (1.7 TB)",
+                "Standard_M128s (2 TB)",
+                "Standard_M128ms (3.8 TB)",
+                "Standard_E16s_v3 (128 GB)",
+                "Standard_E32s_v3 (256 GB)",
+                "Standard_E64s_v3 (448 GB)"
             ]
         },
         "NetworkName": {
@@ -158,8 +158,10 @@
     "hanaUri": "https://raw.githubusercontent.com/claudhg9/saptest/master/hanastudio.ps1",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('NetworkName'))]",
     "HANAsubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('HANASubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('NetworkName')), '/subnets/',parameters('HANASubnetName')))]",
-    "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('NetworkName')), '/subnets/',parameters('ManagementSubnetName')))]"
-  },
+    "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('NetworkName')), '/subnets/',parameters('ManagementSubnetName')))]",
+    "vmSizeArray": "[split(parameters('vmSize'),' ')]",
+    "vmSize": "[variables('vmSizeArray')[0]]"
+},
     "resources": [
 
         {
@@ -191,7 +193,7 @@
         }
       },
           { 
-            "condition": "[or(or(equals(parameters('vmSize'),'Standard_E16s_v3'),equals(parameters('vmSize'),'Standard_E32s_v3')), or(equals(parameters('vmSize'),'Standard_E64s_v3'),equals(parameters('vmSize'),'Standard_GS5')))]",
+            "condition": "[or(or(equals(variables('vmSize'),'Standard_E16s_v3'),equals(variables('vmSize'),'Standard_E32s_v3')), or(equals(variables('vmSize'),'Standard_E64s_v3'),equals(variables('vmSize'),'Standard_GS5')))]",
             "apiVersion": "2016-09-01",
             "name": "SmallLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
@@ -229,7 +231,7 @@
                         "value": "[parameters('hanaNumber')]"
                     },
                     "vmSize": {
-                        "value": "[parameters('vmSize')]"
+                        "value": "[variables('vmSize')]"
                     },
                     "IPAllocationMethod":{
                         "value": "[parameters('IPAllocationMethod')]"
@@ -241,7 +243,7 @@
             }
         },
         {
-            "condition": "[equals(parameters('vmSize'),'Standard_M64s')]",
+            "condition": "[equals(variables('vmSize'),'Standard_M64s')]",
             "apiVersion": "2016-09-01",
             "name": "MediumLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
@@ -279,7 +281,7 @@
                         "value": "[parameters('hanaNumber')]"
                     },
                     "vmSize": {
-                        "value": "[parameters('vmSize')]"
+                        "value": "[variables('vmSize')]"
                     },
                     "IPAllocationMethod":{
                         "value": "[parameters('IPAllocationMethod')]"
@@ -291,7 +293,7 @@
             }
         },
         {
-            "condition": "[or(equals(parameters('vmSize'),'Standard_M64ms'),equals(parameters('vmSize'),'Standard_M128s'))]",
+            "condition": "[or(equals(variables('vmSize'),'Standard_M64ms'),equals(variables('vmSize'),'Standard_M128s'))]",
             "apiVersion": "2016-09-01",
             "name": "LargeLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
@@ -329,7 +331,7 @@
                         "value": "[parameters('hanaNumber')]"
                     },
                     "vmSize": {
-                        "value": "[parameters('vmSize')]"
+                        "value": "[variables('vmSize')]"
                     },
                     "IPAllocationMethod":{
                         "value": "[parameters('IPAllocationMethod')]"
@@ -341,7 +343,7 @@
             }
         },
         {
-            "condition": "[equals(parameters('vmSize'), 'Standard_M128ms')]",
+            "condition": "[equals(variables('vmSize'), 'Standard_M128ms')]",
             "apiVersion": "2016-09-01",
             "name": "extralargeLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
@@ -379,7 +381,7 @@
                         "value": "[parameters('hanaNumber')]"
                     },
                     "vmSize": {
-                        "value": "[parameters('vmSize')]"
+                        "value": "[variables('vmSize')]"
                     },
                     "IPAllocationMethod":{
                         "value": "[parameters('IPAllocationMethod')]"
