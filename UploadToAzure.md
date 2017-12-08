@@ -8,12 +8,12 @@ Log in to your Azure Account:
 
 Click on create a resource:
 
-<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload2.png" width="480">
+<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload2.png" width="400">
 
 Type in storage account and click on Storage Account - blob, file, table, queue:
 
 
-<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload3.png" width="480">
+<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload3.png" width="600">
 
 Click on Create:
 
