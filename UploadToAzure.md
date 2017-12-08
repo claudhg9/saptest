@@ -1,10 +1,10 @@
-#UPload files to Azure 
+# Upload files to Azure 
 
-##Using the portal
+## From the portal
 
 Log in to your Azure Account:
 
-![Upload 1](https://github.com/claudhg9/saptest/blob/master/media/Upload1.png)
+<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload1.png" height="24">
 
 Click on create a resource:
 
