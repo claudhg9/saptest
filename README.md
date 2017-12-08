@@ -90,7 +90,7 @@ HANASubnetName |No | Name of the subnet where the HANA server will be provisione
 HANASubnetPrefix |No |Subnet prefix of the subnet where the HANA server will be provisioned | 10.0.5.0/24 | No restrictions
 ManagementSubnetName |No | Name of the subnet where the HANA jumpbox will be provisioned | SAPMgmtSubnet | No restrictions
 ManagementSubnetPrefix |No |Subnet prefix of the subnet where the HANA jumpbox will be provisioned | 10.0.6.0/24 | No restrictions
-CustomURI | Yes | URI where the SAP bits are stored, for example https://yourBlobName.blob.core.windows.net/yourContainerName | None | No restrictions
+CustomURI | Yes | URI where the SAP bits are stored for Azure use the URI up to the container, excluding the SAPBtis folder | None | No restrictions
 VMUserName | No | Username for both the HANA server and the HANA jumpbox | testuser | No restrictions
 VMPassword | Yes | Password for the user defined above | None | No restrictions
 OperatingSystem | No | Linux distribution to use for the HANA server | SLES for SAP 12 SP2 | SLES for SAP 12 SP2, RHEL 7.2 for SAP HANA
