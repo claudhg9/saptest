@@ -34,7 +34,7 @@ Click on Blobs:
 
 Click on Container and configure a container Name. Make sure to change the Access level to Blob
 
-<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload8.png" height="480">
+<img src="https://github.com/claudhg9/saptest/blob/master/media/Upload8.png" width="480">
 
 To upload the files as indicated in the README.md click on Upload, expand the Advanced option and use the Upload to folder option to create the SapBits folder.
 
