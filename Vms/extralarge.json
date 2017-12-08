@@ -14,32 +14,10 @@
                 "description": "Uri for SAP Bits"
             }
         },
-        "networkName": {
+        "HANAsubnetRef": {
             "type": "string",
-            "defaultValue": "ra-sap-hana-vnet",
             "metadata": {
-                "description": "The Hana vNet"
-            }
-        },
-        "addressPrefixes": {
-            "type": "string",
-            "defaultValue": "10.0.0.0/16",
-            "metadata": {
-                "description": "The Hana vNET prefix"
-            }
-        },
-        "subnetName": {
-            "type": "string",
-            "defaultValue": "SAPDataSubnet",
-            "metadata": {
-                "description": "The Hana subnet name"
-            }
-        },
-        "subnetPrefix": {
-            "type": "string",
-            "defaultValue": "10.0.5.0/24",
-            "metadata": {
-                "description": "The data subnet"
+                "description": "The Hana subnet reference ID"
             }
         },
         "OperatingSystem": {
@@ -86,16 +64,32 @@
             "metadata": {
                 "description": "Size of VM to deploy"
             }
-        }
+        },
+        "IPAllocationMethod": {
+            "type": "string",
+            "allowedValues" : [
+              "Dynamic",
+              "Static"
+            ],
+            "metadata": {
+                "description": "IP Allocation Method"
+          }
+        },
+        "StaticIP": {
+          "type": "string",
+          "metadata": {
+            "description": "IP Address for the HANA VM when Static IP Allocation Method has been selected"
+          },
+          "defaultValue": "10.0.5.4"
+        }    
     },
     "variables": {
         "api-version": "2017-06-01",
         "api-version-vm": "2017-03-30",
         "vmPassword": "HANA07061992!",
         "mode": "Push",
-        "nicName": "[parameters('vmName')]",
-        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('networkName'))]",
-        "subnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('subnetName'))]",
+        "nicName": "[if(equals(parameters('IPAllocationMethod'),'Static'),concat(parameters('vmName'),'-static'),concat(parameters('vmName'),'-dynamic'))]",
+        "subnetRef": "[parameters('HANAsubnetRef')]",
         "OperatingSystemSpec":{
             "imagePublisher":"[if (contains(parameters('OperatingSystem'),'SLES'),'SUSE','RedHat')]",
             "imageOffer":"[if (contains(parameters('OperatingSystem'),'SLES'),'SLES-SAP','RHEL-SAP-HANA')]",
@@ -120,22 +114,46 @@
     },
     "resources": [
         {
+            "condition": "[equals(parameters('IPAllocationMethod'), 'Dynamic')]",
             "apiVersion": "[variables('api-version')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('nicName')]",
+            "name": "[concat(parameters('vmName'),'-dynamic')]",
             "location": "[resourceGroup().location]",
             "properties": {
-                "ipConfigurations": [{
-                    "name": "ipconfig1",
-                    "properties": {
-                        "privateIPAllocationMethod": "Dynamic",
-                        "subnet": {
-                            "id": "[variables('subnetRef')]"
-                        }
+              "ipConfigurations": [
+                {
+                  "name": "ipconfig1",
+                  "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                      "id": "[variables('subnetRef')]"
                     }
-                }]
+                  }
+                }
+              ]
             }
-        },
+          },
+          {
+            "condition": "[equals(parameters('IPAllocationMethod'), 'Static')]",
+            "apiVersion": "[variables('api-version')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('vmName'),'-static')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+              "ipConfigurations": [
+                {
+                  "name": "ipconfig1",
+                  "properties": {
+                    "privateIPAllocationMethod": "Static",
+                    "privateIPAddress": "[parameters('StaticIP')]",
+                    "subnet": {
+                      "id": "[variables('subnetRef')]"
+                    }
+                  }
+                }
+              ]
+            }
+          },
         {
             "type": "Microsoft.Compute/disks",
             "name": "[concat(parameters('vmName'),'-shared')]",
