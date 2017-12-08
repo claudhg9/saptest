@@ -18,7 +18,7 @@ M128S | 2TB | 3 x P30 | 1 x S30 | 1 x P6 | 1 x S6 | 2 x S40
 M128ms | 3.8TB | 5 x P30 | 1 x S30 | 1 x P6 | 1 x S6 | 5 x S30
 
 ## Installation Media
-Installation media for SAP HANA should be downloaded and placed in the SapBits folder. For more information on how to upload files to Azure please go [here](https://github.com/claudhg9/saptest/blob/master/UploadToAzure.md)  Specifically you need to download SAP package 51052325, which should consist of four files:
+Installation media for SAP HANA should be downloaded and placed in the SapBits folder. You will need to provide the URI for the container where they are stored, for example https://yourBlobName.blob.core.windows.net/yourContainerName. For more information on how to upload files to Azure please go [here](https://github.com/claudhg9/saptest/blob/master/UploadToAzure.md)  Specifically you need to download SAP package 51052325, which should consist of four files:
 ```
 51052325_part1.exe
 51052325_part2.rar
@@ -90,7 +90,7 @@ HANASubnetName |No | Name of the subnet where the HANA server will be provisione
 HANASubnetPrefix |No |Subnet prefix of the subnet where the HANA server will be provisioned | 10.0.5.0/24 | No restrictions
 ManagementSubnetName |No | Name of the subnet where the HANA jumpbox will be provisioned | SAPMgmtSubnet | No restrictions
 ManagementSubnetPrefix |No |Subnet prefix of the subnet where the HANA jumpbox will be provisioned | 10.0.6.0/24 | No restrictions
-CustomURI | Yes | URI where the SAP bits are stored | None | No restrictions
+CustomURI | Yes | URI where the SAP bits are stored, for example https://yourBlobName.blob.core.windows.net/yourContainerName | None | No restrictions
 VMUserName | No | Username for both the HANA server and the HANA jumpbox | testuser | No restrictions
 VMPassword | Yes | Password for the user defined above | None | No restrictions
 OperatingSystem | No | Linux distribution to use for the HANA server | SLES for SAP 12 SP2 | SLES for SAP 12 SP2, RHEL 7.2 for SAP HANA
