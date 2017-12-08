@@ -159,7 +159,7 @@
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('NetworkName'))]",
     "HANAsubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('HANASubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('NetworkName')), '/subnets/',parameters('HANASubnetName')))]",
     "mgmtSubnetRef": "[if (equals(parameters('ExistingNetworkResourceGroup'), 'no') , concat(variables('vnetID'),'/subnets/',parameters('ManagementSubnetName')),concat(resourceId(parameters('ExistingNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks/', parameters('NetworkName')), '/subnets/',parameters('ManagementSubnetName')))]",
-    "vmSizeArray": "[split(variables('vmSize'),' ')]",
+    "vmSizeArray": "[split(parameters('vmSize'),' ')]",
     "vmSize": "[variables('vmSizeArray')[0]]"
 },
     "resources": [
@@ -281,7 +281,7 @@
                         "value": "[parameters('hanaNumber')]"
                     },
                     "vmSize": {
-                        "value": "[parameters('vmSize')]"
+                        "value": "[variables('vmSize')]"
                     },
                     "IPAllocationMethod":{
                         "value": "[parameters('IPAllocationMethod')]"
