@@ -18,7 +18,7 @@ M128S | 2TB | 3 x P30 | 1 x S30 | 1 x P6 | 1 x S6 | 2 x S40
 M128ms | 3.8TB | 5 x P30 | 1 x S30 | 1 x P6 | 1 x S6 | 5 x S30
 
 ## Installation Media
-Installation media for SAP HANA should be downloaded and place in the SapBits folder. This location will be automatically be uploaded to Azure Storage upon deployment.  Specifically you need to download SAP package 51052325, which should consist of four files:
+Installation media for SAP HANA should be downloaded and placed in the SapBits folder. For more information on how to upload files to Azure please go [here](https://github.com/claudhg9/saptest/blob/master/UploadToAzure.md) This location will be automatically be uploaded to Azure Storage upon deployment.  Specifically you need to download SAP package 51052325, which should consist of four files:
 ```
 51052325_part1.exe
 51052325_part2.rar
@@ -63,7 +63,7 @@ New-AzureRmResourceGroupDeployment -Name HANADeployment -ResourceGroupName HANAD
 ```
 
 ### Deploy from CLI
-```azurecli
+```python
 az login
 
 az group create --name HANADeploymentRG --location "Central US"
