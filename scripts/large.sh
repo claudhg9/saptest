@@ -73,7 +73,7 @@ echo "logicalvols2 start" >> /tmp/parameter.txt
   backupvglun1="$(lsscsi $number 0 0 2 | grep -o '.\{9\}$')"
   backupvglun2="$(lsscsi $number 0 0 3 | grep -o '.\{9\}$')"
   pvcreate $backupvglun1 $backupvglun2 $sharedvglun $usrsapvglun
-  vgcreate backupvg $backupvglun1 $backupvglun2 $backupvglun3
+  vgcreate backupvg $backupvglun1 $backupvglun2
   vgcreate sharedvg $sharedvglun
   vgcreate usrsapvg $usrsapvglun
   lvcreate -l 100%FREE -n sharedlv sharedvg 
