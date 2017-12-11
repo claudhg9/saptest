@@ -39,17 +39,10 @@ sudo zypper in -t pattern sap-hana
 echo $Uri >> /tmp/url.txt
 
 cp -f /etc/waagent.conf /etc/waagent.conf.orig
-sedcmd="s/ResourceDisk.EnableSwap=n/ResourceDisk.EnableSwap=y/g"
+sedcmd="s/ResourceDisk.EnableSwap=n/ResourceDisk.EnableSwap=n/g"
 sedcmd2="s/ResourceDisk.SwapSizeMB=0/ResourceDisk.SwapSizeMB=16384/g"
 cat /etc/waagent.conf | sed $sedcmd | sed $sedcmd2 > /etc/waagent.conf.new
 cp -f /etc/waagent.conf.new /etc/waagent.conf
-
-cp -f /etc/systemd/login.conf.d/sap.conf /etc/systemd/login.conf.d/sap.conf.orig
-sedcmd="s/[login]\n
-UserTasksMax=infinity\n/[login]\n
-UserTasksMax=infinity\n/g"
-cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
-cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
 number="$(lsscsi [*] 0 0 4| cut -c2)"
 echo "logicalvols start" >> /tmp/parameter.txt
