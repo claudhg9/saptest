@@ -124,7 +124,7 @@
         "ExistingNetworkResourceGroup": {
             "type": "string",
             "metadata": {
-                "description": "SAP HANA Instance Number"
+                "description": "Type in the name of the Resource Group for an existing network or leave no to use the same one"
             },
             "defaultValue": "no"
         },
