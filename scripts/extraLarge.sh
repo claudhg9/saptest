@@ -39,7 +39,7 @@ sudo zypper in -t pattern sap-hana
 echo $Uri >> /tmp/url.txt
 
 cp -f /etc/waagent.conf /etc/waagent.conf.orig
-sedcmd="s/ResourceDisk.EnableSwap=n/ResourceDisk.EnableSwap=n/g"
+sedcmd="s/ResourceDisk.EnableSwap=n/ResourceDisk.EnableSwap=y/g"
 sedcmd2="s/ResourceDisk.SwapSizeMB=0/ResourceDisk.SwapSizeMB=16384/g"
 cat /etc/waagent.conf | sed $sedcmd | sed $sedcmd2 > /etc/waagent.conf.new
 cp -f /etc/waagent.conf.new /etc/waagent.conf
@@ -117,7 +117,7 @@ echo "hana download start" >> /tmp/parameter.txt
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part2.rar
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part3.rar
 /usr/bin/wget --quiet $Uri/SapBits/51052325_part4.rar
-/usr/bin/wget --quiet "https://raw.githubusercontent.com/claudhg9/saptest/master-subnet/hdbinst.cfg"
+/usr/bin/wget --quiet "https://raw.githubusercontent.com/claudhg9/saptest/master/hdbinst.cfg"
 echo "hana download end" >> /tmp/parameter.txt
 
 date >> /tmp/testdate
